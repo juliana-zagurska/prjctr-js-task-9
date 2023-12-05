@@ -6,14 +6,41 @@ const cta = document.querySelector('button');
 const container = document.querySelector('.container');
 
 // Завантаження попереднього стану з локального сховища
-const savedState = localStorage.getItem('buttonState');
-const savedDateMessage = localStorage.getItem('dateMessage');
-console.log(savedDateMessage);
-current = savedState || 'off';
-currentDate = savedDateMessage || formattedDate();
-updateButtonAndContainer();
+//const savedState = localStorage.getItem('buttonState');
+//const savedDateMessage = localStorage.getItem('dateMessage');
+//current = savedState || 'off';
+//currentDate = savedDateMessage || formattedDate();
+//updateButtonAndContainer();
 
 cta.addEventListener("click", toggleCta);
+
+document.addEventListener('DOMContentLoaded', function () {
+    updateMessageOnLoad();
+    
+});
+function updateMessageOnLoad() {
+    const savedState = localStorage.getItem('buttonState');
+    const savedDateMessage = localStorage.getItem('dateMessage');
+    console.log("Saved Date Message:", savedDateMessage); 
+
+    if (savedState && savedDateMessage) {
+        current = savedState;
+        currentDate = savedDateMessage.split(': ')[1];
+        check = current === 'off' ? 'on' : 'off';
+
+        updateButtonAndContainer();
+        runMessage();
+    } else {
+        current = 'off';
+        //currentDate = formattedDate();
+        currentDate = "";
+        check = 'on';
+
+        updateButtonAndContainer();
+        //runMessage();
+    }
+}
+
 
 function toggleCta() {
     if (current === 'off') {
@@ -24,14 +51,17 @@ function toggleCta() {
         check = 'on';
     }
 
-    // Збереження поточного стану в локальному сховищі
-    localStorage.setItem('buttonState', current);
-    localStorage.setItem('dateMessage', `Last turn ${check}: ${currentDate}`);
     currentDate = formattedDate();
+
+    localStorage.setItem('buttonState', check);
+    localStorage.setItem('dateMessage', `Last turn ${check}: ${currentDate}`);
+
     updateButtonAndContainer();
     runMessage();
-    
 }
+
+
+
 
 function updateButtonAndContainer() {
     cta.innerText = current === 'off' ? 'Turn off' : 'Turn on';
@@ -41,7 +71,6 @@ function updateButtonAndContainer() {
 function runMessage() {
     const existingTextMessage = container.querySelector('.text-message');
     
-    // Видалення попереднього текстового повідомлення
     if (existingTextMessage) {
         existingTextMessage.remove();
     }
