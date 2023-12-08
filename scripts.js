@@ -11,6 +11,7 @@ const container = document.querySelector('.container');
 //current = savedState || 'off';
 //currentDate = savedDateMessage || formattedDate();
 //updateButtonAndContainer();
+
 cta.addEventListener("click", toggleCta);
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -52,7 +53,7 @@ function toggleCta() {
 
     currentDate = formattedDate();
 
-    localStorage.setItem('buttonState', check);
+    localStorage.setItem('buttonState', current);
     localStorage.setItem('dateMessage', `Last turn ${check}: ${currentDate}`);
 
     updateButtonAndContainer();
